@@ -101,6 +101,14 @@ VStack(alignment: .leading) {
 }
 ```
 
+## Right-to-left
+
+`KitoChangeBadge` lays out right to left automatically, and its trend arrows use the `forward`
+symbol variants, so they point leftwards in Arabic or Hebrew along with mirrored charts.
+`percent` and `signedPercent` take a `locale` (default `.current`), and the badge passes the
+environment's `\.locale`. `KitoMoneyFormatting` and `grouped` stay fixed ("1,234.56") on purpose;
+use `Decimal.kitoFormatted(currency:locale:)` for amounts in the user's own locale.
+
 ## License
 
 MIT

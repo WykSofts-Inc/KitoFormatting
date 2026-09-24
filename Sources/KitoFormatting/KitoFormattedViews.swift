@@ -104,6 +104,7 @@ public enum KitoChangeBadgeStyle: Sendable, CaseIterable {
 /// coloured from the theme's `success`/`danger`.
 public struct KitoChangeBadge: View {
     @Environment(\.kitoTheme) private var theme
+    @Environment(\.locale) private var locale
     let fraction: Double
     let fractionDigits: Int
     let style: KitoChangeBadgeStyle
@@ -130,7 +131,7 @@ public struct KitoChangeBadge: View {
     public var body: some View {
         let label = HStack(spacing: 3) {
             Image(systemName: trend.systemImage).font(.caption2.weight(.heavy))
-            Text(KitoNumberFormatting.signedPercent(fraction, fractionDigits: fractionDigits))
+            Text(KitoNumberFormatting.signedPercent(fraction, fractionDigits: fractionDigits, locale: locale))
                 .font(.caption.weight(.bold))
                 .monospacedDigit()
         }
@@ -154,6 +155,6 @@ public struct KitoChangeBadge: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(trend.accessibilityLabel) \(KitoNumberFormatting.signedPercent(fraction, fractionDigits: fractionDigits))")
+        .accessibilityLabel("\(trend.accessibilityLabel) \(KitoNumberFormatting.signedPercent(fraction, fractionDigits: fractionDigits, locale: locale))")
     }
 }

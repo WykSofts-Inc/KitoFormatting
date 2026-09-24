@@ -27,18 +27,20 @@ public enum KitoNumberFormatting {
         }
     }
 
-    public static func percent(_ value: Double, fractionDigits: Int = 0) -> String {
-        value.formatted(.percent.precision(.fractionLength(fractionDigits)))
+    public static func percent(_ value: Double, fractionDigits: Int = 0, locale: Locale = .current) -> String {
+        value.formatted(.percent.precision(.fractionLength(fractionDigits)).locale(locale))
     }
 
     /// "+12.5%" / "−3.2%" / "0.0%" from a fraction (0.125 → "+12.5%") — the sign is always
-    /// shown so a change reads as a change. Uses a true minus sign (U+2212).
-    public static func signedPercent(_ fraction: Double, fractionDigits: Int = 1) -> String {
-        let percent = fraction * 100
-        let magnitude = String(format: "%.\(max(fractionDigits, 0))f", abs(percent))
-        let isZero = Double(magnitude) == 0
-        let sign = isZero ? "" : (percent > 0 ? "+" : "\u{2212}")
-        return "\(sign)\(magnitude)%"
+    /// shown so a change reads as a change. Uses a true minus sign (U+2212). Digits, decimal
+    /// separator and percent sign follow `locale`.
+    public static func signedPercent(_ fraction: Double, fractionDigits: Int = 1, locale: Locale = .current) -> String {
+        let digits = max(fractionDigits, 0)
+        let scale = pow(10, Double(digits))
+        let isZero = (abs(fraction) * 100 * scale).rounded() == 0
+        let magnitude = abs(fraction).formatted(.percent.precision(.fractionLength(digits)).locale(locale))
+        let sign = isZero ? "" : (fraction > 0 ? "+" : "\u{2212}")
+        return "\(sign)\(magnitude)"
     }
 
     /// "1,250,000" / "1,250.50" — fixed comma grouping and a dot for decimals, whatever the
@@ -100,9 +102,10 @@ public enum KitoTrend: Sendable, Equatable {
 
     public var systemImage: String {
         switch self {
-        case .up: return "arrow.up.right"
-        case .down: return "arrow.down.right"
-        case .flat: return "arrow.right"
+        // Forward variants mirror in right-to-left layouts, where time runs leftwards.
+        case .up: return "arrow.up.forward"
+        case .down: return "arrow.down.forward"
+        case .flat: return "arrow.forward"
         }
     }
 

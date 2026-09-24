@@ -1,5 +1,7 @@
 # KitoFormatting
 
+**[Documentation](https://wyksofts-inc.github.io/KitoFormatting/documentation/kitoformatting/)**
+
 Currency (KES, USD, and more), compact number, percent, and date formatting
 — locale-aware, built on Foundation's native `FormatStyle` rather than
 hand-rolled string math.
